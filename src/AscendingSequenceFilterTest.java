@@ -1,4 +1,5 @@
 import algorithm.AscendingSequenceFilter;
+import algorithm.longestpath.LongestPathAlgorithm;
 import algorithm.treebased.TreeBasedAlgorithm;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,13 +16,13 @@ public class AscendingSequenceFilterTest {
     private List<SequenceContainer> sequences = Arrays.asList(
             new SequenceContainer(Arrays.asList(-3, 1, 1, 2, 4, 7, 10), Arrays.asList(-3, 1, 1, 2, 4, 7, 10)),
 
-            new SequenceContainer(Arrays.asList(1, 2, 7, 4, 12, 11, 10, 13), Arrays.asList(1, 2, 7, 12, 13)),
+            new SequenceContainer(Arrays.asList(1, 2, 7, 4, 12, 11, 10, 13), Arrays.asList(1, 2, 4, 10, 13)),
 
             new SequenceContainer(Arrays.asList(3, 10, 4, 5, 8, 6 , 7, 10), Arrays.asList(3, 4, 5, 6, 7, 10)),
 
             new SequenceContainer(Arrays.asList(1, 1, 1, 1, 1, 1 , 1, 1), Arrays.asList(1, 1, 1, 1, 1, 1, 1, 1)),
 
-            new SequenceContainer(Arrays.asList(3, 4, 5, 0, -1, -2 , -5, -6, 1, 0, 2, 2, 6, 7, 12, 15, 1 ), Arrays.asList(0, 0, 2, 2, 6, 7, 12, 15)),
+            new SequenceContainer(Arrays.asList(3, 4, 5, 0, -1, -2 , -5, -6, 1, 0, 2, 2, 6, 7, 12, 15, 1 ), Arrays.asList(0, 1, 2, 2, 6, 7, 12, 15)),
 
             new SequenceContainer(Arrays.asList(15, 13, 14, 19, 3, 5, 1, 3, 3, 7, 15, 13, 14, 19, 22, -200, 23), Arrays.asList(3, 3, 3, 7, 13, 14, 19, 22, 23))
     );
@@ -34,18 +35,18 @@ public class AscendingSequenceFilterTest {
         //filter = new SimpleAlgorithm();
         //filter = new DifferencesAnalysisAlgorithm();
         filter = new TreeBasedAlgorithm();
-        filter2 = new ArlamAlg();
+        filter2 = new LongestPathAlgorithm();
     }
 
     @Test
     public void testLogSet() {
 
         List<Integer> inputList = new ArrayList<>();
-        int size = 16;
+        int size = 30;
         for (int i = 0; i < size; i++) {
             Random random = new Random();
             inputList.add(random.nextInt(size));
-     //       inputList.add(i+1);
+         //   inputList.add(i+1);
         }
         System.out.println(inputList);
         long startTime = System.currentTimeMillis();
@@ -55,7 +56,7 @@ public class AscendingSequenceFilterTest {
         long totalTime = endTime - startTime;
         System.out.println("totalTime: " + totalTime + "; size=" + result.size());
         System.out.println(result);
-//aa
+//rc
         startTime = System.currentTimeMillis();
         result = filter2.filterSequence(inputList);
 

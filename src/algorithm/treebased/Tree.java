@@ -2,11 +2,13 @@ package algorithm.treebased;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 public class Tree {
 
     private Node top;
     private List<Node> limbs;
+    private Queue<ArrayList<Node>> listPool;
 
     public Tree(Node top) {
         this.top = top;
@@ -29,8 +31,6 @@ public class Tree {
             if (limbs.isEmpty()) {
                 limbs.add(new Node(top, value));
             } else {
-                Boolean isAnyIncreased = increaseLimbs(value);
-                if (!isAnyIncreased) {
                     List<Node> newLimbs = new ArrayList<>();
                     for (Node limb : limbs) {
                         newLimbs.add(limb);
@@ -43,7 +43,7 @@ public class Tree {
                     limbs = newLimbs;
                 }
             }
-        }
+
         return true;
     }
 
@@ -71,7 +71,7 @@ public class Tree {
     }
 
     public static Node findAppropriateBrunch(Node limb, Integer value) {
-        Node currentBrunch = limb.parent;
+        Node currentBrunch = limb;
         while(currentBrunch.value > value) {
             currentBrunch = currentBrunch.parent;
         }
