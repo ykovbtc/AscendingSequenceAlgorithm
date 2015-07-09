@@ -2,22 +2,26 @@ package algorithm.treebased;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 public class Tree {
 
     private Node top;
-    private List<Node> limbs;
-    private Queue<ArrayList<Node>> listPool;
+    private ArrayList<Node> activeLimbs;
+    private ArrayList<Node> passiveLimbs;
+    private ArrayListPool<Node> listPool;
+    private Integer activeLimbValue;
 
-    public Tree(Node top) {
+    public Tree(Node top, ArrayListPool<Node> listPool) {
         this.top = top;
-        this.limbs = new ArrayList<>();
-        this.limbs.addAll(top.childs);
+        this.listPool = listPool;
+        this.activeLimbs = this.listPool.getList();
+        this.passiveLimbs = this.listPool.getList();
+        this.activeLimbs.add(top);
+        this.activeLimbValue = top.value;
     }
 
-    public List<Node> getLimbs() {
-        return limbs;
+    public List<Node> getActiveLimbs() {
+        return activeLimbs;
     }
 
     public Node getTop() {
@@ -25,54 +29,36 @@ public class Tree {
     }
 
     public boolean appendElement(Integer value) {
-        if (value < top.value) {
+        if (value > top.value) {
+            System.out.print(activeLimbs.size() + ",  ");
             return false;
         } else {
-            if (limbs.isEmpty()) {
-                limbs.add(new Node(top, value));
-            } else {
-                    List<Node> newLimbs = new ArrayList<>();
-                    for (Node limb : limbs) {
-                        newLimbs.add(limb);
-                        Node brunch = findAppropriateBrunch(limb, value);
-                        if (!isAnyNodeChildContainsValue(brunch, value)) {
-                            Node newLimb = new Node(brunch, value);
-                            newLimbs.add(newLimb);
-                        }
+                ArrayList<Node> newLimbs = listPool.getList();
+                Node furthermostLimb = activeLimbs.get(0);
+                for (int i = 1; i < activeLimbs.size(); i++) {
+                    Node limb = activeLimbs.get(i);
+                    Node brunch = findAppropriateBrunch(limb, value);
+                    if(brunch.position > furthermostLimb.position) {
+                        furthermostLimb = brunch;
                     }
-                    limbs = newLimbs;
+                    if (brunch != limb) {
+                        newLimbs.add(limb);
+                    }
                 }
-            }
 
+                Node newLimb = new Node(furthermostLimb, value);
+                newLimbs.add(newLimb);
+                listPool.utilizeList(activeLimbs);
+                activeLimbs = newLimbs;
+
+        }
+        System.out.print(activeLimbs.size() + ",  ");
         return true;
-    }
-
-    public boolean isAnyNodeChildContainsValue(Node node, Integer value) {
-        if(node.childs != null && !node.childs.isEmpty()) {
-            for (Node child : node.childs) {
-                if(child.value.equals(value)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public Boolean increaseLimbs(Integer value) {
-        Boolean isAtLeastOneAdded = false;
-        for (int index = 0; index < limbs.size(); index++) {
-            Node limb = limbs.get(index);
-            if (limb.value <= value) {
-                limbs.set(index, new Node(limb, value));
-                isAtLeastOneAdded = true;
-            }
-        }
-        return isAtLeastOneAdded;
     }
 
     public static Node findAppropriateBrunch(Node limb, Integer value) {
         Node currentBrunch = limb;
-        while(currentBrunch.value > value) {
+        while (currentBrunch.value < value) {
             currentBrunch = currentBrunch.parent;
         }
         return currentBrunch;

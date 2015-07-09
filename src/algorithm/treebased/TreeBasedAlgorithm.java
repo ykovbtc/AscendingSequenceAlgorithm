@@ -12,16 +12,20 @@ public class TreeBasedAlgorithm implements AscendingSequenceFilter {
         if(sequence == null || sequence.size() < 2) {
             return sequence;
         }
-        LinkedList<Tree> trees = new LinkedList<>();
-        trees.add(new Tree(new Node(null, sequence.get(0))));
 
-        for (int index = 1; index < sequence.size(); index++) {
+        ArrayListPool<Node> nodeArrayListPool = new ArrayListPool<>(sequence.size() / 100 + 2, sequence.size() / 1000 + 10);
+
+        LinkedList<Tree> trees = new LinkedList<>();
+        trees.add(new Tree(new Node(null, sequence.get(sequence.size() - 1)), nodeArrayListPool));
+
+        for (int index = sequence.size() - 2; index >= 0 ; index--) {
             Integer elementValue = sequence.get(index);
             boolean isAdded = appendValueToTrees(trees, elementValue);
             if(!isAdded) {
-                Tree tree = new Tree(new Node(null, elementValue));
+                Tree tree = new Tree(new Node(null, elementValue), nodeArrayListPool);
                 trees.add(tree);
             }
+            System.out.print("\nelementIndex : " + index + " trees: " + trees.size() + " limbs: ");
         }
 
         Node longestNode = findLongestNode(trees);
@@ -33,21 +37,13 @@ public class TreeBasedAlgorithm implements AscendingSequenceFilter {
             longestNode = longestNode.parent;
         } while (longestNode != null);
 
-        return reverse(output);
-    }
-
-    private List<Integer> reverse(List<Integer> output) {
-        List<Integer> list = new LinkedList<>();
-        for (int i = output.size() - 1; i >= 0; i--) {
-            list.add(output.get(i));
-        }
-        return list;
+        return output;
     }
 
     private Node findLongestNode(LinkedList<Tree> trees) {
         Node longestNode = null;
         for (Tree tree : trees) {
-            for (Node node : tree.getLimbs()) {
+            for (Node node : tree.getActiveLimbs()) {
                 if(longestNode == null) {
                     longestNode = node;
                 }

@@ -4,7 +4,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 public class NodeTest {
 
@@ -13,7 +12,6 @@ public class NodeTest {
         Integer value = 5;
         Node node = new Node(null, value);
         assertNull(node.parent);
-        assertTrue(node.childs.isEmpty());
         assertEquals(0, node.position.intValue());
         assertEquals(value, node.value);
     }
@@ -24,11 +22,7 @@ public class NodeTest {
         Integer value = 5;
         Node node = new Node(parentNode, value);
         assertEquals(parentNode, node.parent);
-        assertTrue(node.childs.isEmpty());
         assertEquals(1, node.position.intValue());
         assertEquals(value, node.value);
-
-        assertEquals(1, node.parent.childs.size());
-        assertEquals(node, node.parent.childs.get(0));
     }
 }

@@ -42,11 +42,12 @@ public class AscendingSequenceFilterTest {
     public void testLogSet() {
 
         List<Integer> inputList = new ArrayList<>();
-        int size = 30;
+        int size = 10;
         for (int i = 0; i < size; i++) {
             Random random = new Random();
+           // inputList.add(3);
             inputList.add(random.nextInt(size));
-         //   inputList.add(i+1);
+           // inputList.add(i+1);
         }
         System.out.println(inputList);
         long startTime = System.currentTimeMillis();
@@ -54,7 +55,7 @@ public class AscendingSequenceFilterTest {
 
         long endTime = System.currentTimeMillis();
         long totalTime = endTime - startTime;
-        System.out.println("totalTime: " + totalTime + "; size=" + result.size());
+        System.out.println("\n\ntotalTime: " + totalTime + "; size=" + result.size());
         System.out.println(result);
 //rc
         startTime = System.currentTimeMillis();
@@ -62,11 +63,11 @@ public class AscendingSequenceFilterTest {
 
         endTime = System.currentTimeMillis();
         totalTime = endTime - startTime;
-        System.out.println("totalTime: " + totalTime + "; size=" + result.size());
+        System.out.println("\n\ntotalTime: " + totalTime + "; size=" + result.size());
         System.out.println(result);
     }
 
-    @Test
+   // @Test
     public void testFilterSequences() throws Exception {
         boolean anyFailed = false;
         for (int index = 0; index < sequences.size(); index++) {
